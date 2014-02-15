@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: "xkcd";
-    src: url('http://antiyawn.com/uploads/Humor-Sans.ttf');
+    src: url('../fonts/Humor-Sans-1.0.ttf');
 }
 
 body {
@@ -40,32 +40,18 @@ a:hover {
     clear: both;
 }
 
-#plot, #examples {
+#plot {
     width: 700px;
     margin: 70px auto;
     text-align: center;
 }
 
-#plot h1, #examples h1 {
+#plot h1 {
     text-align: center;
 }
 
 #plot {
     margin-top: 50px;
-}
-
-#examples {
-    border: 1px solid #999;
-    margin-top: 0;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    -moz-box-shadow:    0px 0px 3px 1px #ccc;
-    -webkit-box-shadow: 0px 0px 3px 1px #ccc;
-    box-shadow:         0px 0px 3px 1px #ccc;
-}
-
-#examples h1:nth-child(n+2) {
-    margin-top: 100px;
 }
 
 p {
@@ -168,21 +154,4 @@ path.axis {
 path.bgline {
     stroke: white;
     stroke-width: 6px;
-}
-
-footer {
-    display: block;
-    height: 90px;
-}
-
-.social {
-    float: left;
-}
-
-.fb-like span:first-child {
-    height: 24px !important;
-}
-
-.credit {
-    float: right;
 }
