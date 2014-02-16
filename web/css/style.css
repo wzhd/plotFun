@@ -44,13 +44,6 @@ a:hover {
     width: 700px;
     margin: 70px auto;
     text-align: center;
-}
-
-#plot h1 {
-    text-align: center;
-}
-
-#plot {
     margin-top: 50px;
 }
 
@@ -84,34 +77,6 @@ input {
     border: 1px solid #999;
 }
 
-label.slider {
-    top: -9px;
-    position: relative;
-    padding-left: 30px;
-}
-
-#slider {
-    width: 429px;
-    top: 0px;
-    right: -4px;
-    height: 24px;
-    display: inline-block;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    -khtml-border-radius: 0px;
-    border-radius: 0px
-}
-
-#slider a {
-    height: 36px;
-    width: 30px;
-    border: 1px solid #999;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    -khtml-border-radius: 0px;
-    border-radius: 0px
-}
-
 span#more {
     width: 24px;
     height: 24px;
@@ -129,11 +94,6 @@ span#more:hover, span#more:active {
     color: #2A85E8;
     border: 1px solid #2A85E8;
     cursor: pointer;
-}
-
-.equation2, .equation3,
-.equation4, .equation5 {
-    display: none;
 }
 
 text.title {

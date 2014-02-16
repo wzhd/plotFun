@@ -102,9 +102,6 @@ function xkcdplot() {
                               .attr("transform", "rotate(-90)")
                               .text(ylabel);
 
-        // Insert H1 title
-        $("<h1>"+title+"</h1>").insertBefore($(el[0]).parent());
-
         return xkcd;
     };
 

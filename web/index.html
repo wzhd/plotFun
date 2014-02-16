@@ -1,6 +1,6 @@
 
 <!DOCTYPE HTML>
-<html>
+<html ng-app="PlotFunApp">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -11,10 +11,9 @@
     <meta name="author" content="Kevin Xu, Charlie Guo" />
 
     <!-- CSS Files -->
-    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="css/style.css" />
     </head>
-<body>
+<body ng-controller="PlotFunCtrl as ctrl">
 
     <div class="container">
 
@@ -24,77 +23,77 @@
         <form>
             <div class="left">
                 <div class="input">
-                    <label for="equation">Equation</label>
-                    <input type="text" id="equation" placeholder="x*sin(x)" />
+                    <label>Equation</label>
+                    <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="ctrl.equation"/>
                 </div>
 
                 <div class="input">
-                    <label for="xmin">X-minimum</label>
-                    <input type="text" id="xmin" placeholder="-10" value="-10" />
+                    <label>X-minimum</label>
+                    <input type="number" placeholder="-10" value="-10" ng-change="ctrl.drawGraph()" ng-model="ctrl.xmin"/>
                 </div>
 
                 <div class="input">
-                    <label for="xmax">X-maximum</label>
-                    <input type="text" id="xmax" placeholder="10" value="10" />
+                    <label>X-maximum</label>
+                    <input type="number" placeholder="10" value="10" ng-change="ctrl.drawGraph()" ng-model="ctrl.xmax"/>
                 </div>
             </div>
 
             <div class="right">
                 <div class="input">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" placeholder="Your Graph" value="Your Graph" />
+                    <label>Title</label>
+                    <input type="text" placeholder="Your Graph" ng-model="ctrl.title"/>
                 </div>
 
                 <div class="input">
-                    <label for="xlabel">X-label</label>
-                    <input type="text" id="xlabel" placeholder="X" value="X" />
+                    <label>X-label</label>
+                    <input type="text" placeholder="X" ng-change="ctrl.drawGraph()" ng-model="ctrl.xlabel"/>
                 </div>
 
                 <div class="input">
-                    <label for="ylabel">Y-label</label>
-                    <input type="text" id="ylabel" placeholder="Y" value="Y" />
+                    <label>Y-label</label>
+                    <input type="text" placeholder="Y" ng-change="ctrl.drawGraph()" ng-model="ctrl.ylabel"/>
                 </div>
             </div>
 
             <div class="clear"></div>
-            <label for="slider" class="slider">Refinement</label>
-            <div id="slider"></div>
-            <span id="more">+</span>
+            <label>Fineness</label>
+            <input type="number" ng-model="ctrl.fineness" ng-init="ctrl.fineness=200" ng-change="ctrl.drawGraph()"/>
+            <span id="more" ng-click="ctrl.morePlots()">+</span>
 
-            <div class="left">
-                <div class="input">
-                    <label for="equation2" class="equation2">Equation 2</label>
-                    <input type="text" id="equation2" class="equation2" placeholder="x^2" />
+            <div class="left" >
+                <div class="input" ng-show="ctrl.showEquation2" ng-init="ctrl.showEquation2=false">
+                    <label>Equation 2</label>
+                    <input type="text" placeholder="x^2" ng-model="ctrl.equation2" ng-change="ctrl.drawGraph()"/>
                 </div>
 
-                <div class="input">
-                    <label for="equation4" class="equation4">Equation 4</label>
-                    <input type="text" id="equation4" class="equation4" placeholder="1/tan(x)" />
+                <div class="input" ng-show="ctrl.showEquation4" ng-init="ctrl.showEquation4=false">
+                    <label>Equation 4</label>
+                    <input type="text" placeholder="1/tan(x)" ng-model="ctrl.equatio4" ng-change="ctrl.drawGraph()"/>
                 </div>
             </div>
 
             <div class="right">
-                <div class="input">
-                    <label for="equation3" class="equation3">Equation 3</label>
-                    <input type="text" id="equation3" class="equation3" placeholder="sqrt(x*10)" />
+                <div class="input" ng-show="ctrl.showEquation3" ng-init="ctrl.showEquation3=false">
+                    <label>Equation 3</label>
+                    <input type="text" placeholder="sqrt(x*10)" ng-model="ctrl.equation3" ng-change="ctrl.drawGraph()"/>
                 </div>
 
-                <div class="input">
-                    <label for="equation5" class="equation5">Equation 5</label>
-                    <input type="text" id="equation5" class="equation5" placeholder="abs(x)" />
+                <div class="input" ng-show="ctrl.showEquation5" ng-init="ctrl.showEquation5=false">
+                    <label>Equation 5</label>
+                    <input type="text" placeholder="abs(x)" ng-model="ctrl.equation5" ng-change="ctrl.drawGraph()"/>
                 </div>
             </div>
 
             <div class="clear"></div>
         </form>
+        <h1>{{ctrl.title}}</h1>
+        <p ng-show="ctrl.invalidFunction">{{ctrl.warning}}</p>
     </div>
 
     <div id="plot"></div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/angular.min.js"></script>
     <script src="js/d3.v2.min.js"></script>
-    <script src="js/jquery.textchange.min.js"></script>
     <script src="js/xkcd.js"></script>
     <script src="js/parser.js"></script>
     <script src="js/draw.js"></script>
