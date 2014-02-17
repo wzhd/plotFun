@@ -1,3 +1,6 @@
 .DS_Store
 notes.txt
 TAGS
+packages
+pubspec.lock
+
