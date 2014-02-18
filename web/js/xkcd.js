@@ -26,7 +26,7 @@ function xkcdplot() {
     var elements = [];
 
     // The XKCD object itself.
-    var xkcd = function (nm, param) {
+    this.xkcd = function (nm, param) {
         el = d3.select(nm).append("svg")
                     .attr("width", width + 2 * margin)
                     .attr("height", height + 2 * margin)
@@ -42,11 +42,10 @@ function xkcdplot() {
         if ("xlim" in param) xlim = param["xlim"];
         if ("ylim" in param) ylim = param["ylim"];
 
-        return xkcd;
     };
 
     // Do the render.
-    xkcd.draw = function () {
+    this.draw = function () {
         // Set the axes limits.
         xscale.domain(xlim).range([0, width]);
         yscale.domain(ylim).range([height, 0]);
@@ -102,11 +101,10 @@ function xkcdplot() {
                               .attr("transform", "rotate(-90)")
                               .text(ylabel);
 
-        return xkcd;
     };
 
     // Adding plot elements.
-    xkcd.plot = function (data, opts) {
+    this.plot = function (data, opts) {
         var x = function (d) { return d.x; },
             y = function (d) { return d.y; },
             cx = function (d) { return xscale(x(d)); },
@@ -134,7 +132,6 @@ function xkcdplot() {
                         opts: opts
                       });
 
-        return xkcd;
     };
 
     // Plot styles.
@@ -242,7 +239,5 @@ function xkcdplot() {
         if (typeof d[k] === "undefined") return def;
         return d[k];
     }
-
-    return xkcd;
 
 }

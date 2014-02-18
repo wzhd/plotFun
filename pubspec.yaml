@@ -2,4 +2,4 @@ name: plotfun
 version: 0.0.1
 dependencies:
   angular: any
-
+  math_expressions: 0.0.8
