@@ -1,9 +1,10 @@
 library plot_fun_controller;
 
 import 'dart:html';
-import 'dart:js';
 import 'package:angular/angular.dart';
 import 'package:math_expressions/math_expressions.dart' as Mathexp;
+import 'package:plotfun/xkcd_plot.dart';
+import 'dart:svg' show SvgElement;
 
 @NgController(
     selector: '[plot-fun]',
@@ -27,6 +28,9 @@ import 'package:math_expressions/math_expressions.dart' as Mathexp;
     bool showEquation5 = false;
     bool invalidFunction = false;
     String warning;
+    
+    //Variables
+    DivElement plotElement = document.querySelector('#plot');
 
     void morePlots() {
       if (showEquation4 == true) showEquation5 = true;
@@ -36,7 +40,7 @@ import 'package:math_expressions/math_expressions.dart' as Mathexp;
     }
 
     void drawGraph() {
-      JsObject plot = new JsObject(context['xkcdplot']);
+      XkcdPlot plot = new XkcdPlot();
       drawGraphEquation(plot, equation, 'steelBlue');
       if (showEquation2) drawGraphEquation(plot, equation2, 'red');
       if (showEquation3) drawGraphEquation(plot, equation3, 'green');
@@ -45,31 +49,30 @@ import 'package:math_expressions/math_expressions.dart' as Mathexp;
     }
 
     void drawGraphEquation(plot, expression, color) {
-      document.querySelector('#plot').innerHtml = '';
-
       if (expression != "'Invalid function'" && !xmin.isNaN && !xmax.isNaN && xmin < xmax) {
         invalidFunction = false;
         Mathexp.Parser parser = new Mathexp.Parser();
         Mathexp.Expression exp = parser.parse(expression);
         Mathexp.ContextModel cm = new Mathexp.ContextModel();
         Mathexp.Variable x = new Mathexp.Variable('x');
-        function f(d) {
+        double f(d) {
           cm.bindVariable(x, new Mathexp.Number(d));
           double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
           if (result.isNaN) {
-            return 0;
+            return 0.0;
           } else if (result.isInfinite && result < 0) {
-            return -25;
+            return -25.0;
           } else if (result.isInfinite && result > 0) {
-            return 25;
+            return 25.0;
           } else {
             return result;
           }
         }
 
-        List<double> data = new List<double>();
-        for(double i = xmin, step = (xmax - xmin) / fineness; i < xmax; i += step) {
-          data.add({'x': i, 'y': f(i) });
+        List<List<double>> data = new List<List<double>>();
+        for(double i = xmin.toDouble(), step = (xmax - xmin) / fineness;
+            i < xmax; i += step) {
+          data.add([i, f(i)]);
         }
 
         Map parameters = {
@@ -91,10 +94,12 @@ import 'package:math_expressions/math_expressions.dart' as Mathexp;
             parameters['ylim'] = [-10, 10];
           }
         }
-        plot.callMethod('xkcd', ['#plot', new JsObject.jsify(parameters)]);
-        plot.callMethod('plot', [new JsObject.jsify(data),new JsObject.jsify({'stroke': color})]);
-        plot.callMethod('draw');
-
+        plot.xkcd(parameters);
+        plot.plot(data, {'stroke': color});
+        SvgElement graph = plot.draw();
+        plotElement.innerHtml = '';
+        plotElement.nodes.add(graph);
+        
         for (int i = xmin; i < xmax; i++) {
           cm.bindVariable(x, new Mathexp.Number(i));
           double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
