@@ -1,4 +1,5 @@
 import 'dart:math' as Math;
+import 'dart:collection' show Queue;
 
 //find the min and max of data
 List<num> extent(data, accessor) {
@@ -36,7 +37,21 @@ class LinearScale {
   }
 }
 
-double randomNormal([double mean = 0.0, double deviation = 1.0]) {
-  double rand = (new Math.Random()).nextDouble();
-  return mean + 2 * deviation * rand - deviation; //TODO generate real normal distribution
+class RandomNormal {
+  static Queue<double> _normalRand =  new Queue<double>();
+
+  void newRandNormal() {
+    double rand0 = (new Math.Random()).nextDouble();
+    double rand1 = (new Math.Random()).nextDouble();
+    double urand0 = Math.sqrt(-2 * Math.log(rand0)) * Math.cos(2 * Math.PI * rand1);
+    double urand1 = Math.sqrt(-2 * Math.log(rand1)) * Math.cos(2 * Math.PI * rand0);
+    _normalRand.add(urand0);
+    _normalRand.add(urand1);
+  }
+
+  double next([double mean = 0.0, double deviation = 1.0]) {
+    if (_normalRand.length == 0) newRandNormal();
+    double result = (_normalRand.removeFirst()) * Math.sqrt(deviation) + mean;
+    return result;
+  }
 }

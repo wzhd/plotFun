@@ -249,10 +249,9 @@ class XkcdPlot {
       gradients[i] = [d[0] / len, d[1] / len];
     }
     
-    
     List<double> randomized = new List<double>();
     for(int i = 0; i < resampled.length; i++) {
-      randomized.add(randomNormal(resampled[0][1]));
+      randomized.add((new RandomNormal().next(resampled[0][1])));
     }
 
     // Generate some perturbations.
