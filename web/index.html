@@ -58,7 +58,7 @@
 
             <div class="clear"></div>
             <label>Fineness</label>
-            <input type="number" ng-model="ctrl.fineness" ng-change="ctrl.drawGraph()"/>
+            <input type="range" min="1" max="250" ng-model="ctrl.fineness" ng-change="ctrl.drawGraph()"/>
             <span id="more" ng-click="ctrl.morePlots()">+</span>
 
             <div class="left" >
