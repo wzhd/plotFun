@@ -77,19 +77,11 @@ class XkcdPlot {
     xAxisArrow0.attributes['class'] = 'x axis arrow';
     xAxisArrow0.attributes['d'] = xinterp([[width - s + o, y0 + aa], [width + o, y0], [width - s + o, y0 - aa]]);
     gElement.append(xAxisArrow0);
-    PathElement xAxisArrow1 = new PathElement();
-    xAxisArrow1.attributes['class'] = 'x axis arrow';
-    xAxisArrow1.attributes['d'] = xinterp([[s - o, y0 + aa], [-o, y0], [s - o, y0 - aa]]);
-    gElement.append(xAxisArrow1);
 
     PathElement yAxisArrow0 = new PathElement();
     yAxisArrow0.attributes['class'] = 'y axis arrow';
     yAxisArrow0.attributes['d'] = xinterp([[x0 + aa, s - o], [x0, -o], [x0 - aa, s - o]]);
     gElement.append(yAxisArrow0);
-    PathElement yAxisArrow1 = new PathElement();
-    yAxisArrow1.attributes['class'] = 'y axis arrow';
-    yAxisArrow1.attributes['d'] = xinterp([[x0 + aa, height - s + o], [x0, height + o], [x0 - aa, height - s + o]]);
-    gElement.append(yAxisArrow1);
 
     for (int i = 0, l = elements.length; i < l; ++i) {
       var e = elements[i];
