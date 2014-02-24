@@ -21,7 +21,7 @@ import 'dart:svg' show SvgElement;
     String equation5;
     int xmin = -10;
     int xmax = 10;
-    int fineness = 100;
+    double fineness = 100.0;
     bool showEquation2 = false;
     bool showEquation3 = false;
     bool showEquation4 = false;
