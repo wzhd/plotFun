@@ -3,4 +3,8 @@ notes.txt
 TAGS
 packages
 pubspec.lock
+*.dart.js
+*.dart.js.deps
+*.dart.js.map
+*.dart.precompiled.js
 
