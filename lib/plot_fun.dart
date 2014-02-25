@@ -12,7 +12,7 @@ import 'package:plotfun/xkcd_plot.dart';
     String title;
     String xlabel;
     String ylabel;
-    String equation;
+    List<Map<String, String>> equations = new List<Map<String, String>>();
     int xmin = -10;
     int xmax = 10;
     double fineness = 100.0;
@@ -21,9 +21,11 @@ import 'package:plotfun/xkcd_plot.dart';
     XkcdPlot ploter = new XkcdPlot(document.querySelector('#plot'));
 
     PlotFunController() {
+      equations.add({'expression': ''});
     }
 
     void morePlots() {
+      equations.add({'expression': ''});
     }
 
     void drawGraph() {
@@ -36,7 +38,6 @@ import 'package:plotfun/xkcd_plot.dart';
         'fineness': fineness,
         'xlim': [xmin - (xmax - xmin) / 16,
           xmax + (xmax - xmin) / 16] };
-      List equations = [equation];
       warning = ploter.drawGraphEquation(equations, param);
     }
   }

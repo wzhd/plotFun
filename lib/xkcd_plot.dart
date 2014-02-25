@@ -109,7 +109,7 @@ class XkcdPlot {
     return svgElement;
   }
 
-  String drawGraphEquation(List<String> equations, Map param) {
+  String drawGraphEquation(List<Map<String, String>> equations, Map param) {
     List<String> colours = ['steelBlue', 'red', 'green', 'purple', 'gray'];
     String warning = '';
     int xmin, xmax;
@@ -131,7 +131,7 @@ class XkcdPlot {
     }
 
     for(int i = 0; i < equations.length; i++) {
-      String equation = equations[i];
+      String equation = equations[i]['expression'];
       Mathexp.Parser parser = new Mathexp.Parser();
       Mathexp.Expression exp = parser.parse(equation);
       Mathexp.ContextModel cm = new Mathexp.ContextModel();

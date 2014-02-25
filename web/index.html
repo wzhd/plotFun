@@ -23,9 +23,9 @@
 
         <form>
             <div class="left">
-                <div class="input">
+                <div class="input" ng-repeat="equation in ctrl.equations">
                     <label>Equation</label>
-                    <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="ctrl.equation"/>
+                    <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="equation['expression']"/>
                 </div>
 
                 <div class="input">
