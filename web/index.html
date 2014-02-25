@@ -61,34 +61,10 @@
             <input type="range" min="2" max="250" ng-model="ctrl.fineness" ng-change="ctrl.drawGraph()"/>
             <span id="more" ng-click="ctrl.morePlots()">+</span>
 
-            <div class="left" >
-                <div class="input" ng-hide="!ctrl.showEquation2">
-                    <label>Equation 2</label>
-                    <input type="text" placeholder="x^2" ng-model="ctrl.equation2" ng-change="ctrl.drawGraph()"/>
-                </div>
-
-                <div class="input" ng-hide="!ctrl.showEquation4">
-                    <label>Equation 4</label>
-                    <input type="text" placeholder="1/tan(x)" ng-model="ctrl.equation4" ng-change="ctrl.drawGraph()"/>
-                </div>
-            </div>
-
-            <div class="right">
-                <div class="input" ng-hide="!ctrl.showEquation3">
-                    <label>Equation 3</label>
-                    <input type="text" placeholder="sqrt(x*10)" ng-model="ctrl.equation3" ng-change="ctrl.drawGraph()"/>
-                </div>
-
-                <div class="input" ng-hide="!ctrl.showEquation5">
-                    <label>Equation 5</label>
-                    <input type="text" placeholder="abs(x)" ng-model="ctrl.equation5" ng-change="ctrl.drawGraph()"/>
-                </div>
-            </div>
-
             <div class="clear"></div>
         </form>
         <h1>{{ctrl.title}}</h1>
-        <p ng-show="ctrl.invalidFunction">{{ctrl.warning}}</p>
+        <p ng-show="ctrl.warning.length != 0">{{ctrl.warning}}</p>
     </div>
 
     <div id="plot"></div>

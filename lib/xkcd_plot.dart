@@ -5,6 +5,7 @@
 import 'dart:html';
 import 'dart:svg';
 import 'dart:math' as Math;
+import 'package:math_expressions/math_expressions.dart' as Mathexp;
 import 'package:plotfun/util.dart';
 
 class XkcdPlot {
@@ -33,7 +34,7 @@ class XkcdPlot {
   List<Map> elements = new List<Map>();
 
   // The XKCD object itself.
-  void xkcd(param) {
+  XkcdPlot(DivElement plotDiv) {
     svgElement = new SvgElement.tag('svg');
     svgElement.attributes['width'] = (width + 2 * margin).toString();
     svgElement.attributes['height'] = (height + 2 * margin).toString();
@@ -41,14 +42,8 @@ class XkcdPlot {
     gElement = new GElement();
     svgElement.append(gElement);
     gElement.attributes['transform'] = 'translate(' + margin.toString() + ', ' + margin.toString() + ')';
-
-    if (param['title'] != null) title = param['title'];
-    if (param['xlabel'] != null) xlabel = param['xlabel'];
-    if (param['ylabel'] != null) ylabel = param['ylabel'];
-    if (param['width'] != null) width = param['width'];
-    if (param['height'] != null) height = param['height'];
-    if (param['xlim'] != null) xlim = param['xlim'];
-    if (param['ylim'] != null) ylim = param['ylim'];
+    
+    plotDiv.append(svgElement);
   }
 
   // Do the render.
@@ -112,6 +107,81 @@ class XkcdPlot {
     gElement.append(yLabel);
 
     return svgElement;
+  }
+
+  String drawGraphEquation(List<String> equations, Map param) {
+    List<String> colours = ['steelBlue', 'red', 'green', 'purple', 'gray'];
+    String warning = '';
+    int xmin, xmax;
+    double fineness;
+    if (param['xmin'] != null) xmin = param['xmin'];
+    if (param['xmax'] != null) xmax = param['xmax'];
+    if (param['title'] != null) title = param['title'];
+    if (param['xlabel'] != null) xlabel = param['xlabel'];
+    if (param['ylabel'] != null) ylabel = param['ylabel'];
+    if (param['width'] != null) width = param['width'];
+    if (param['height'] != null) height = param['height'];
+    if (param['xlim'] != null) xlim = param['xlim'];
+    if (param['ylim'] != null) ylim = param['ylim'];
+    if (param['fineness'] != null) fineness = param['fineness'];
+
+    if (xmin.isNaN || xmax.isNaN || xmin >= xmax) {
+      print('[Invalid Functions] ' + equations.toString());
+      return('Sorry, invalid function');
+    }
+
+    for(int i = 0; i < equations.length; i++) {
+      String equation = equations[i];
+      Mathexp.Parser parser = new Mathexp.Parser();
+      Mathexp.Expression exp = parser.parse(equation);
+      Mathexp.ContextModel cm = new Mathexp.ContextModel();
+      Mathexp.Variable x = new Mathexp.Variable('x');
+      double f(d) {
+        cm.bindVariable(x, new Mathexp.Number(d));
+        double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
+        if (result.isNaN) {
+          return 0.0;
+        } else if (result.isInfinite && result < 0) {
+          return -25.0;
+        } else if (result.isInfinite && result > 0) {
+          return 25.0;
+        } else {
+          return result;
+        }
+      }
+
+      List<List<double>> data = new List<List<double>>();
+      for(double i = xmin.toDouble(), step = (xmax - xmin) / fineness;
+          i < xmax; i += step) {
+        data.add([i, f(i)]);
+      }
+
+      if (equation.indexOf('x') < 0) {
+        cm.bindVariable(x, new Mathexp.Number(0));
+        double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
+        if (result < -10) {
+          ylim = [result, 10];
+        } else if (result > 10) {
+          ylim = [-10, result];
+        } else {
+          ylim = [-10, 10];
+        }
+      }
+
+      for (int j = xmin; j < xmax; j++) {
+        cm.bindVariable(x, new Mathexp.Number(j));
+        double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
+        if (result.isNaN || result.isInfinite) {
+          warning = 'Some part of the equation is invalid along the domain you chose';
+          break;
+        }
+      }
+      plot(data, {'stroke': colours[i % colours.length]});
+    }
+    draw();
+
+    print('[Graph Equation] ' + equations.toString());
+    return(warning);
   }
 
   // Adding plot elements.
