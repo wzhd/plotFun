@@ -23,8 +23,11 @@ class XkcdPlot {
   String title = 'The Awesome Graph';
   List<double> xlim;
   List<double> ylim;
+
+  // Elements
   SvgElement svgElement;
   GElement gElement;
+  List<GElement> equationPlots = new List<GElement>();
 
   // Plot elements.
   LinearScale xscale = new LinearScale();
@@ -42,12 +45,12 @@ class XkcdPlot {
     gElement = new GElement();
     svgElement.append(gElement);
     gElement.attributes['transform'] = 'translate(' + margin.toString() + ', ' + margin.toString() + ')';
-    
+
     plotDiv.append(svgElement);
   }
 
   // Do the render.
-  SvgElement draw() {
+  void draw() {
 
     // Compute the zero points where the axes will be drawn.
     double x0 = xscale.scale(0);
@@ -80,7 +83,9 @@ class XkcdPlot {
 
     for (int i = 0, l = elements.length; i < l; ++i) {
       var e = elements[i];
-      lineplot(e['data'], e['opts']);
+      GElement plot = lineplot(e['data'], e['opts']);
+      equationPlots.add(plot);
+      gElement.append(plot);
     }
 
     // Add some axes labels.
@@ -105,8 +110,19 @@ class XkcdPlot {
     };
     yLabel.innerHtml = ylabel;
     gElement.append(yLabel);
+  }
 
-    return svgElement;
+  void removeEquationAt(int index) {
+    elements.removeAt(index);
+    equationPlots[index].remove();
+    equationPlots.removeAt(index);
+  }
+
+  void removeAllEquations() {
+    for (int i = equationPlots.length - 1; i >= 0; i--) {
+      removeEquationAt(i);
+    }
+    gElement.innerHtml = '';
   }
 
   String drawGraphEquation(List equations, Map param) {
@@ -130,6 +146,7 @@ class XkcdPlot {
       return('Sorry, invalid function');
     }
 
+    removeAllEquations();
     for(int i = 0; i < equations.length; i++) {
       String equation = equations[i].expression;
       Mathexp.Parser parser = new Mathexp.Parser();
@@ -210,7 +227,7 @@ class XkcdPlot {
       ..range = [0, width];
     yscale..domain = ylim
       ..range = [height, 0];
-    
+
     // Add the plotting function.
     List<List<double>> linearScaled = new List<List<double>>();
     for (int i = 0; i < data.length; i++) {
@@ -223,7 +240,7 @@ class XkcdPlot {
   }
 
   // Plot styles.
-  void lineplot(data, opts) {
+  GElement lineplot(data, opts) {
     double strokeWidth = _get(opts, 'stroke-width', 3.0);
     String color = _get(opts, 'stroke', 'steelblue');
 
@@ -235,7 +252,6 @@ class XkcdPlot {
       'fill': 'none',
       'class': 'bgline'
     };
-    gElement.append(bgPath);
 
     PathElement linePath = new PathElement();
     linePath.attributes = {
@@ -244,7 +260,13 @@ class XkcdPlot {
       'stroke-width': strokeWidth.toString() + 'px',
       'fill': 'none'
     };
-    gElement.append(linePath);
+
+    GElement line = new GElement();
+
+    line.append(bgPath);
+    line.append(linePath);
+
+    return line;
   }
 
   // XKCD-style line interpolation. Roughly based on:
@@ -310,7 +332,7 @@ class XkcdPlot {
       double len = Math.sqrt(d[0] * d[0] + d[1] * d[1]);
       gradients[i] = [d[0] / len, d[1] / len];
     }
-    
+
     List<double> randomized = new List<double>();
     for(int i = 0; i < resampled.length; i++) {
       randomized.add((new RandomNormal().next(resampled[0][1])));

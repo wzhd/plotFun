@@ -28,6 +28,12 @@ class PlotFunController {
     equations.add(new Equation());
   }
 
+  void removePlot(int index) {
+    equations.removeAt(index);
+    ploter.removeEquationAt(index);
+    drawGraph();
+  }
+
   void drawGraph() {
     Map param = {
       'title': title,
