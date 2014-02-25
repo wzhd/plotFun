@@ -12,7 +12,7 @@ class PlotFunController {
   String title;
   String xlabel;
   String ylabel;
-  List<Map<String, String>> equations = new List<Map<String, String>>();
+  List<Equation> equations = new List<Equation>();
   int xmin = -10;
   int xmax = 10;
   double fineness = 100.0;
@@ -21,11 +21,11 @@ class PlotFunController {
   XkcdPlot ploter = new XkcdPlot(document.querySelector('#plot'));
 
   PlotFunController() {
-    equations.add({'expression': ''});
+    equations.add(new Equation());
   }
 
   void morePlots() {
-    equations.add({'expression': ''});
+    equations.add(new Equation());
   }
 
   void drawGraph() {
@@ -40,4 +40,8 @@ class PlotFunController {
         xmax + (xmax - xmin) / 16] };
     warning = ploter.drawGraphEquation(equations, param);
   }
+}
+
+class Equation {
+  String expression;
 }

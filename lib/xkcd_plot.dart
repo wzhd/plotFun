@@ -109,7 +109,7 @@ class XkcdPlot {
     return svgElement;
   }
 
-  String drawGraphEquation(List<Map<String, String>> equations, Map param) {
+  String drawGraphEquation(List equations, Map param) {
     List<String> colours = ['steelBlue', 'red', 'green', 'purple', 'gray'];
     String warning = '';
     int xmin, xmax;
@@ -126,12 +126,12 @@ class XkcdPlot {
     if (param['fineness'] != null) fineness = param['fineness'];
 
     if (xmin.isNaN || xmax.isNaN || xmin >= xmax) {
-      print('[Invalid Functions] ' + equations.toString());
+      print('[Invalid Functions] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
       return('Sorry, invalid function');
     }
 
     for(int i = 0; i < equations.length; i++) {
-      String equation = equations[i]['expression'];
+      String equation = equations[i].expression;
       Mathexp.Parser parser = new Mathexp.Parser();
       Mathexp.Expression exp = parser.parse(equation);
       Mathexp.ContextModel cm = new Mathexp.ContextModel();
@@ -180,7 +180,7 @@ class XkcdPlot {
     }
     draw();
 
-    print('[Graph Equation] ' + equations.toString());
+    print('[Graph Equation] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
     return(warning);
   }
 
