@@ -1,7 +1,3 @@
-// Original Author: Dan Foreman-Mackey http://dan.iel.fm/xkcd/
-// Customized by: Kevin Xu https://github.com/imkevinxu
-// Rewritten in dart by: Zihao Wang https://github.com/wzhd
-
 import 'dart:html';
 import 'dart:svg';
 import 'dart:math' as Math;
@@ -251,8 +247,7 @@ class XkcdPlot {
     return line;
   }
 
-  // XKCD-style line interpolation. Roughly based on:
-  //    jakevdp.github.com/blog/2012/10/07/xkcd-style-plots-in-matplotlib
+  // XKCD-style line interpolation
   String xinterp(points) {
     // Scale the data.
     List<double> lengths = [xscale.scale(xlim[1]) - xscale.scale(xlim[0]),
