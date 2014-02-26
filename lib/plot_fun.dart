@@ -9,9 +9,9 @@ import 'package:plotfun/xkcd_plot.dart';
     publishAs: 'ctrl')
 class PlotFunController {
   //variables
-  String title;
-  String xlabel;
-  String ylabel;
+  String xlabel = 'Time of Day';
+  String ylabel = 'Awesomeness';
+  String title = 'The Awesome Graph';
   List<Equation> equations = new List<Equation>();
   int xmin = -10;
   int xmax = 10;
@@ -37,7 +37,6 @@ class PlotFunController {
 
   void drawGraph() {
     Map param = {
-      'title': title,
       'xlabel': xlabel,
       'ylabel': ylabel,
       'xmin': xmin,

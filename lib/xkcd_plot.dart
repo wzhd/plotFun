@@ -10,13 +10,12 @@ class XkcdPlot {
   int width = 600;
   int height = 300;
   int margin = 20;
+  String xlabel;
+  String ylabel;
   int arrowSize = 12;
   double arrowAspect = 0.4;
   int arrowOffset = 6;
   double magnitude = 0.003;
-  String xlabel = 'Time of Day';
-  String ylabel = 'Awesomeness';
-  String title = 'The Awesome Graph';
   List<double> xlim;
   List<double> ylim;
 
