@@ -16,7 +16,8 @@
 <body plot-fun>
 
     <div class="container">
-
+        <h1>{{ctrl.title}}</h1>
+        <div id="plot"></div>
         <form>
             <div class="left">
                 <div class="input" ng-repeat="equation in ctrl.equations">
@@ -60,11 +61,8 @@
 
             <div class="clear"></div>
         </form>
-        <h1>{{ctrl.title}}</h1>
         <p ng-show="ctrl.warning.length != 0">{{ctrl.warning}}</p>
     </div>
-
-    <div id="plot"></div>
 
     <script src="main.dart" type="application/dart"></script>
     <script src="packages/browser/dart.js"></script>

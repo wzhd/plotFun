@@ -21,7 +21,8 @@ class PlotFunController {
   XkcdPlot plotter = new XkcdPlot(document.querySelector('#plot'));
 
   PlotFunController() {
-    equations.add(new Equation());
+    equations.add(new Equation('sin(x)'));
+    drawGraph();
   }
 
   void morePlots() {
@@ -49,4 +50,6 @@ class PlotFunController {
 
 class Equation {
   String expression;
+
+  Equation([this.expression]);
 }
