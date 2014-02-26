@@ -18,7 +18,7 @@ class PlotFunController {
   double fineness = 100.0;
   String warning;
 
-  XkcdPlot ploter = new XkcdPlot(document.querySelector('#plot'));
+  XkcdPlot plotter = new XkcdPlot(document.querySelector('#plot'));
 
   PlotFunController() {
     equations.add(new Equation());
@@ -30,7 +30,7 @@ class PlotFunController {
 
   void removePlot(int index) {
     equations.removeAt(index);
-    ploter.removeEquationAt(index);
+    plotter.removeEquationAt(index);
     drawGraph();
   }
 
@@ -43,7 +43,7 @@ class PlotFunController {
       'xmax': xmax,
       'fineness': fineness
       };
-    warning = ploter.drawGraphEquation(equations, param);
+    warning = plotter.drawGraphEquation(equations, param);
   }
 }
 
