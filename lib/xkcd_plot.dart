@@ -130,6 +130,7 @@ class XkcdPlot {
     String warning = '';
     int xmin, xmax;
     double fineness;
+    ylim = [double.INFINITY, double.NEGATIVE_INFINITY];
     if (param['xmin'] != null) xmin = param['xmin'];
     if (param['xmax'] != null) xmax = param['xmax'];
     if (param['title'] != null) title = param['title'];
@@ -147,6 +148,8 @@ class XkcdPlot {
     }
 
     removeAllEquations();
+    // An array of equations that each have points that each have coordinates
+    List<List<List<double>>> equationsPoints = new List<List<List<double>>>();
     for(int i = 0; i < equations.length; i++) {
       String equation = equations[i].expression;
       Mathexp.Parser parser = new Mathexp.Parser();
@@ -157,6 +160,7 @@ class XkcdPlot {
         cm.bindVariable(x, new Mathexp.Number(d));
         double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
         if (result.isNaN) {
+          warning = 'Some part of the equation is invalid along the domain you chose';
           return 0.0;
         } else if (result.isInfinite && result < 0) {
           return -25.0;
@@ -167,58 +171,22 @@ class XkcdPlot {
         }
       }
 
-      List<List<double>> data = new List<List<double>>();
+      List<List<double>> oneEquationPoints = new List<List<double>>();
       for(double i = xmin.toDouble(), step = (xmax - xmin) / fineness;
           i < xmax; i += step) {
-        data.add([i, f(i)]);
-      }
-
-      if (equation.indexOf('x') < 0) {
-        cm.bindVariable(x, new Mathexp.Number(0));
-        double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
-        if (result < -10) {
-          ylim = [result, 10];
-        } else if (result > 10) {
-          ylim = [-10, result];
-        } else {
-          ylim = [-10, 10];
+        double value = f(i);
+        oneEquationPoints.add([i, value]);
+        if (param['ylim'] == null) { //no y limit explicitly set
+          if (value < ylim[0])
+            ylim[0] = value;
+          if (value > ylim[1])
+            ylim[1] = value;
         }
       }
-
-      for (int j = xmin; j < xmax; j++) {
-        cm.bindVariable(x, new Mathexp.Number(j));
-        double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
-        if (result.isNaN || result.isInfinite) {
-          warning = 'Some part of the equation is invalid along the domain you chose';
-          break;
-        }
-      }
-      plot(data, {'stroke': colours[i % colours.length]});
+      equationsPoints.add(oneEquationPoints);
     }
-    draw();
 
-    print('[Graph Equation] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
-    return(warning);
-  }
-
-  // Adding plot elements.
-   void plot(data, opts) {
-    double x(d) { return d[0]; };
-    double y(d) { return d[1]; };
-    double cx(d) { return xscale.scale(x(d)); };
-    double cy(d) { return yscale.scale(y(d)); };
-
-    List<double> xl = extent(data, x);
-    List<double> yl = extent(data, y);
-
-    // Rescale the axes.
-    xlim = xlim == null ? xl : xlim;
-    xlim[0] = Math.min(xlim[0], xl[0]);
-    xlim[1] = Math.max(xlim[1], xl[1]);
-
-    ylim = ylim == null ? yl : ylim;
-    ylim[0] = Math.min(ylim[0], yl[0]);
-    ylim[1] = Math.max(ylim[1], yl[1]);
+    // Make some room
     ylim[0] = ylim[0] - (ylim[1] - ylim[0]) / 16;
     ylim[1] = ylim[1] + (ylim[1] - ylim[0]) / 16;
 
@@ -228,6 +196,17 @@ class XkcdPlot {
     yscale..domain = ylim
       ..range = [height, 0];
 
+    for(int i = 0; i < equationsPoints.length; i++) {
+      plot(equationsPoints[i], {'stroke': colours[i % colours.length]});
+    }
+    draw();
+
+    print('[Graph Equation] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
+    return(warning);
+  }
+
+  // Adding plot elements.
+   void plot(data, opts) {
     // Add the plotting function.
     List<List<double>> linearScaled = new List<List<double>>();
     for (int i = 0; i < data.length; i++) {
@@ -315,11 +294,11 @@ class XkcdPlot {
     // Compute the gradients.
     List<List<double>> gradients = new List<List<double>>();
     for(int i = 0; i < resampled.length; i++) {
-      if (i == 0) 
+      if (i == 0)
         gradients.add([resampled[1][0] - resampled[0][0],
                 resampled[1][1] - resampled[0][1]]);
       else if (i == resampled.length - 1)
-        gradients.add([resampled[i][0] - resampled[i - 1][0], 
+        gradients.add([resampled[i][0] - resampled[i - 1][0],
                        resampled[i][1] - resampled[i - 1][1]]);
       else
       gradients.add([0.5 * (resampled[i + 1][0] - resampled[i - 1][0]),
