@@ -41,9 +41,8 @@ class PlotFunController {
       'ylabel': ylabel,
       'xmin': xmin,
       'xmax': xmax,
-      'fineness': fineness,
-      'xlim': [xmin - (xmax - xmin) / 16,
-        xmax + (xmax - xmin) / 16] };
+      'fineness': fineness
+      };
     warning = ploter.drawGraphEquation(equations, param);
   }
 }

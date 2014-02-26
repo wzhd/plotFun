@@ -131,16 +131,19 @@ class XkcdPlot {
     int xmin, xmax;
     double fineness;
     ylim = [double.INFINITY, double.NEGATIVE_INFINITY];
-    if (param['xmin'] != null) xmin = param['xmin'];
-    if (param['xmax'] != null) xmax = param['xmax'];
+
     if (param['title'] != null) title = param['title'];
     if (param['xlabel'] != null) xlabel = param['xlabel'];
     if (param['ylabel'] != null) ylabel = param['ylabel'];
     if (param['width'] != null) width = param['width'];
     if (param['height'] != null) height = param['height'];
-    if (param['xlim'] != null) xlim = param['xlim'];
     if (param['ylim'] != null) ylim = param['ylim'];
     if (param['fineness'] != null) fineness = param['fineness'];
+
+    if (param['xmin'] != null) xmin = param['xmin'];
+    if (param['xmax'] != null) xmax = param['xmax'];
+    xlim = [xmin - (xmax - xmin) / 16,
+             xmax + (xmax - xmin) / 16];
 
     if (xmin.isNaN || xmax.isNaN || xmin >= xmax) {
       print('[Invalid Functions] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
