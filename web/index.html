@@ -22,42 +22,42 @@
         <form>
             <div class="left">
                 <div class="input" ng-repeat="equation in ctrl.equations">
-                    <label>Equation</label>
-                    <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="equation.expression"/>
+                    <label for="equation-{{$index}}-input">Equation</label>
+                    <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="equation.expression" id="equation-{{$index}}-input"/>
                     <button ng-click="ctrl.removePlot($index)">remove</button>
                 </div>
 
                 <div class="input">
-                    <label>X-minimum</label>
-                    <input type="number" ng-change="ctrl.drawGraph()" ng-model="ctrl.xmin"/>
+                    <label for="x-min-input">X-minimum</label>
+                    <input type="number" ng-change="ctrl.drawGraph()" ng-model="ctrl.xmin" id="x-min-input"/>
                 </div>
 
                 <div class="input">
-                    <label>X-maximum</label>
-                    <input type="number" ng-change="ctrl.drawGraph()" ng-model="ctrl.xmax"/>
+                    <label for="x-max-input">X-maximum</label>
+                    <input type="number" ng-change="ctrl.drawGraph()" ng-model="ctrl.xmax" id="x-max-input"/>
                 </div>
             </div>
 
             <div class="right">
                 <div class="input">
-                    <label>Title</label>
-                    <input type="text" placeholder="Your Graph" ng-model="ctrl.title"/>
+                    <label for="title-input">Title</label>
+                    <input type="text" placeholder="Your Graph" ng-model="ctrl.title" id="title-input"/>
                 </div>
 
                 <div class="input">
-                    <label>X-label</label>
-                    <input type="text" placeholder="X" ng-change="ctrl.drawGraph()" ng-model="ctrl.xlabel"/>
+                    <label for="x-label-input">X-label</label>
+                    <input type="text" placeholder="X" ng-change="ctrl.drawGraph()" ng-model="ctrl.xlabel" id="x-label-input"/>
                 </div>
 
                 <div class="input">
-                    <label>Y-label</label>
-                    <input type="text" placeholder="Y" ng-change="ctrl.drawGraph()" ng-model="ctrl.ylabel"/>
+                    <label for="y-label-input">Y-label</label>
+                    <input type="text" placeholder="Y" ng-change="ctrl.drawGraph()" ng-model="ctrl.ylabel" id="y-label-input"/>
                 </div>
             </div>
 
             <div class="clear"></div>
-            <label>Fineness</label>
-            <input type="range" min="2" max="250" ng-model="ctrl.fineness" ng-change="ctrl.drawGraph()"/>
+            <label for="fineness-input">Fineness</label>
+            <input type="range" min="2" max="250" ng-model="ctrl.fineness" ng-change="ctrl.drawGraph()" id="fineness-input"/>
             <span id="more" ng-click="ctrl.morePlots()">+</span>
 
             <div class="clear"></div>
