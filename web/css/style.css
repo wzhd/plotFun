@@ -26,16 +26,6 @@ a:hover {
     text-align: center;
 }
 
-.left {
-    padding-left: 70px;
-    float: left;
-}
-
-.right {
-    padding-right: 70px;
-    float: right;
-}
-
 .clear {
     clear: both;
 }
