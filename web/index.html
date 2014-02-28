@@ -20,7 +20,8 @@
         <div id="plot"></div>
         <p ng-show="ctrl.warning.length != 0">{{ctrl.warning}}</p>
         <form>
-            <div>
+            <fieldset style="float: left">
+                <legend>Equations</legend>
                 <div class="input" ng-repeat="equation in ctrl.equations">
                     <label for="equation-{{$index}}-input">Equation</label>
                     <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="equation.expression" id="equation-{{$index}}-input"/>
@@ -28,9 +29,10 @@
                 </div>
 
                 <span id="more" ng-click="ctrl.morePlots()">+</span>
-            </div>
+            </fieldset>
 
-            <div>
+            <fieldset style="float: right">
+                <legend>Parameters</legend>
                 <div class="input">
                     <label for="title-input">Title</label>
                     <input type="text" placeholder="Your Graph" ng-model="ctrl.title" id="title-input"/>
@@ -58,7 +60,7 @@
 
                 <label for="fineness-input">Fineness</label>
                 <input type="range" min="2" max="250" ng-model="ctrl.fineness" ng-change="ctrl.drawGraph()" id="fineness-input"/>
-            </div>
+            </fieldset>
         </form>
     </div>
 
