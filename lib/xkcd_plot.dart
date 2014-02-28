@@ -127,7 +127,6 @@ class XkcdPlot {
     double fineness;
     ylim = [double.INFINITY, double.NEGATIVE_INFINITY];
 
-    if (param['title'] != null) title = param['title'];
     if (param['xlabel'] != null) xlabel = param['xlabel'];
     if (param['ylabel'] != null) ylabel = param['ylabel'];
     if (param['width'] != null) width = param['width'];
