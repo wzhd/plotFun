@@ -23,7 +23,7 @@
             <fieldset style="float: left">
                 <legend>Equations</legend>
                 <div class="input" ng-repeat="equation in ctrl.equations">
-                    <label for="equation-{{$index}}-input">Equation</label>
+                    <label for="equation-{{$index}}-input">Equation {{$index+1}}</label>
                     <input type="text" placeholder="x*sin(x)" ng-change="ctrl.drawGraph()" ng-model="equation.expression" id="equation-{{$index}}-input"/>
                     <button ng-click="ctrl.removePlot($index)">remove</button>
                 </div>
