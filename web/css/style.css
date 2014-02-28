@@ -26,10 +26,6 @@ a:hover {
     text-align: center;
 }
 
-.clear {
-    clear: both;
-}
-
 #plot {
     width: 700px;
     margin: 70px auto;
@@ -74,10 +70,6 @@ button:hover, button:active {
 
 #add-equation-button {
     width: 100%;
-}
-
-text.title {
-    font-size: 20px;
 }
 
 path {
