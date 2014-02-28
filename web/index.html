@@ -18,6 +18,7 @@
     <div class="container">
         <h1>{{ctrl.title}}</h1>
         <div id="plot"></div>
+        <p ng-show="ctrl.warning.length != 0">{{ctrl.warning}}</p>
         <form>
             <div class="left">
                 <div class="input" ng-repeat="equation in ctrl.equations">
@@ -61,7 +62,6 @@
 
             <div class="clear"></div>
         </form>
-        <p ng-show="ctrl.warning.length != 0">{{ctrl.warning}}</p>
     </div>
 
     <script src="main.dart" type="application/dart"></script>
