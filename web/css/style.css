@@ -11,15 +11,6 @@ body {
     color: #333;
 }
 
-a {
-    text-decoration: none;
-    color: steelblue;
-}
-
-a:hover {
-    color: #0E5C9E;
-}
-
 .container {
     width: 700px;
     margin: 20px auto;
@@ -80,12 +71,13 @@ input {
 
 button {
     border-radius: 4px;
-    background-color: white;
+    background-color: #f7f7f7;
     border: black 2px solid;
 }
 
 button:hover, button:active {
-    color: #2A85E8;
+    color: #0E5C9E;
+    background-color: white;
     cursor: pointer;
 }
 
