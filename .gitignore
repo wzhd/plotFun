@@ -7,4 +7,5 @@ pubspec.lock
 *.dart.js.deps
 *.dart.js.map
 *.dart.precompiled.js
+build/
 
