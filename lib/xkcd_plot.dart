@@ -15,7 +15,7 @@ class XkcdPlot {
   int arrowSize = 12;
   double arrowAspect = 0.4;
   int arrowOffset = 6;
-  double magnitude = 0.003;
+  double magnitude = 1.5;
   List<double> xlim;
   List<double> ylim;
 
@@ -247,83 +247,71 @@ class XkcdPlot {
 
   // XKCD-style line interpolation
   String xinterp(points) {
-    // Scale the data.
-    List<double> lengths = [xscale.scale(xlim[1]) - xscale.scale(xlim[0]),
-                            yscale.scale(ylim[1]) - yscale.scale(ylim[0])];
-    List<double> origin = [xscale.scale(xlim[0]), yscale.scale(ylim[0])];
-    List<List<double>> scaled = new List<List<double>>();
-    for (int i = 0; i < points.length; i++) {
-      List<double> pt = points[i];
-      scaled.add([(pt[0] - origin[0]) / lengths[0], (pt[1] - origin[1]) / lengths[1]]);
-    }
-
     // Compute the distance between each point and its predecessor
-    List<double> distances = new List<double>();
-    for (int i = 0; i < scaled.length; i++) {
-      if (i == 0) distances.add(0.0);
+    List<int> distances = new List<int>(); // number of points is int anyway
+    for (int i = 0; i < points.length; i++) {
+      if (i == 0) distances.add(0);
       else {
-      double xd = scaled[i][0] - scaled[i - 1][0];
-      double yd = scaled[i][1] - scaled[i - 1][1];
-      distances.add(Math.sqrt(xd * xd + yd * yd));
+      num xd = points[i][0] - points[i - 1][0];
+      num yd = points[i][1] - points[i - 1][1];
+      distances.add(Math.sqrt(xd * xd + yd * yd).toInt());
       }
     }
-    double lineLength = distances.reduce((value, element) { return value + element; });
 
-    // Choose the number of interpolation points based on this distance.
-    int N = (200 * lineLength).round();
-
-    // Re-sample the line.
-    List<List<double>> resampled = new List<List<double>>();
+    // Re-sample the line. So that it has more points
+    List<List<num>> resampled = new List<List<double>>();
     for(int i = 1; i < distances.length; i++) {
-      int n = Math.max(3, (distances[i] / lineLength * N).round());
-      double x = scaled[i - 1][0];
-      double xd = (scaled[i][0] - scaled[i - 1][0]) / (n - 1);
-      double y = scaled[i - 1][1];
-      double yd = (scaled[i][1] - scaled[i - 1][1]) / (n - 1);
-      for (int j = 0; j < n; ++j) {
+      int pointsNum = Math.max(3, distances[i] ~/ 2);
+      num x = points[i - 1][0];
+      num xd = (points[i][0] - points[i - 1][0]) / (pointsNum - 1);
+      num y = points[i - 1][1];
+      num yd = (points[i][1] - points[i - 1][1]) / (pointsNum - 1);
+      for (int j = 0; j < pointsNum - 1; ++j) {
         resampled.add([x, y]);
         x += xd;
         y += yd;
       }
     }
+    resampled.add([points[points.length - 1][0], points[points.length - 1][1]]);
 
     // Compute the gradients.
-    List<List<double>> gradients = new List<List<double>>();
+    List<List<num>> gradients = new List<List<double>>();
     for(int i = 0; i < resampled.length; i++) {
       if (i == 0)
         gradients.add([resampled[1][0] - resampled[0][0],
-                resampled[1][1] - resampled[0][1]]);
+                       resampled[1][1] - resampled[0][1]]);
       else if (i == resampled.length - 1)
         gradients.add([resampled[i][0] - resampled[i - 1][0],
                        resampled[i][1] - resampled[i - 1][1]]);
       else
-      gradients.add([0.5 * (resampled[i + 1][0] - resampled[i - 1][0]),
-                     0.5 * (resampled[i + 1][1] - resampled[i - 1][1])]);
+        gradients.add([resampled[i + 1][0] - resampled[i - 1][0],
+                       resampled[i + 1][1] - resampled[i - 1][1]]);
     }
 
     // Normalize the gradient vectors to be unit vectors.
     for(int i = 0; i < gradients.length; i++) {
-      List<double> d = gradients[i];
+      List<num> d = gradients[i];
       double len = Math.sqrt(d[0] * d[0] + d[1] * d[1]);
       gradients[i] = [d[0] / len, d[1] / len];
     }
 
-    List<double> randomized = new List<double>();
+    List<num> randNums = new List<double>();
+    RandomNormal rand = new RandomNormal();
     for(int i = 0; i < resampled.length; i++) {
-      randomized.add((new RandomNormal().next(resampled[0][1])));
+      randNums.add(rand.next());
     }
 
     // Generate some perturbations.
-    List perturbations = smooth(randomized, 3);
+    List perturbations = smooth(randNums, 3);
 
     // Add in the perturbations and re-scale the re-sampled curve.
     String result = 'M';
     for (int i = 0; i < resampled.length; i++){
-      var d = resampled[i];
-      double p = perturbations[i];
-      List<double> g = gradients[i];
-      result = result + ((d[0] + magnitude * g[1] * p) * lengths[0] + origin[0]).toString() + ',';
-      result = result + ((d[1] - magnitude * g[0] * p) * lengths[1] + origin[1]).toString();
+      List<num> data = resampled[i];
+      num pert = perturbations[i];
+      List<num> grad = gradients[i];
+      result = result + (data[0] + magnitude * grad[1] * pert).toString() + ',';
+      result = result + (data[1] - magnitude * grad[0] * pert).toString();
       if (i != resampled.length - 1)
         result = result + 'L';
     }
