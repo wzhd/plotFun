@@ -18,17 +18,17 @@ class RandomNormal {
   static Queue<double> _normalRand =  new Queue<double>();
 
   void newRandNormal() {
-    double rand0 = (new Math.Random()).nextDouble();
-    double rand1 = (new Math.Random()).nextDouble();
-    double urand0 = Math.sqrt(-2 * Math.log(rand0)) * Math.cos(2 * Math.PI * rand1);
-    double urand1 = Math.sqrt(-2 * Math.log(rand1)) * Math.cos(2 * Math.PI * rand0);
+    num rand0 = (new Math.Random()).nextDouble();
+    num rand1 = (new Math.Random()).nextDouble();
+    num urand0 = Math.sqrt(-2 * Math.log(rand0)) * Math.cos(2 * Math.PI * rand1);
+    num urand1 = Math.sqrt(-2 * Math.log(rand1)) * Math.cos(2 * Math.PI * rand0);
     _normalRand.add(urand0);
     _normalRand.add(urand1);
   }
 
-  double next([double mean = 0.0, double deviation = 1.0]) {
+  num next([num mean = 0.0, num deviation = 1.0]) {
     if (_normalRand.length == 0) newRandNormal();
-    double result = (_normalRand.removeFirst()) * Math.sqrt(deviation) + mean;
+    num result = (_normalRand.removeFirst()) * Math.sqrt(deviation) + mean;
     return result;
   }
 }
