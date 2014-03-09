@@ -19,9 +19,7 @@ body {
 
 #plot {
     width: 700px;
-    margin: 70px auto;
     text-align: center;
-    margin-top: 50px;
 }
 
 p {
@@ -31,7 +29,6 @@ p {
 }
 
 form {
-    margin-top: 40px;
     font-size: 20px;
 }
 
