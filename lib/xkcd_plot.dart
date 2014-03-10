@@ -154,12 +154,8 @@ class XkcdPlot {
       double f(d) {
         cm.bindVariable(x, new Mathexp.Number(d));
         double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
-        if (result.isNaN) {
-          return 0.0;
-        } else if (result.isInfinite && result < 0) {
-          return -25.0;
-        } else if (result.isInfinite && result > 0) {
-          return 25.0;
+        if (result.isNaN || result.isInfinite) {
+          return double.NAN;
         } else {
           return result;
         }
@@ -169,12 +165,14 @@ class XkcdPlot {
       for(double i = xmin.toDouble(), step = (xmax - xmin) / fineness;
           i < xmax; i += step) {
         double value = f(i);
-        oneEquationPoints.add([i, value]);
-        if (param['ylim'] == null) { //no y limit explicitly set
-          if (value < ylim[0])
-            ylim[0] = value;
-          if (value > ylim[1])
-            ylim[1] = value;
+        if (!value.isNaN) {
+          oneEquationPoints.add([i, value]);
+          if (param['ylim'] == null) { //no y limit explicitly set
+            if (value < ylim[0])
+              ylim[0] = value;
+            if (value > ylim[1])
+              ylim[1] = value;
+          }
         }
       }
       equationsPoints.add(oneEquationPoints);
