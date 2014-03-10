@@ -120,9 +120,8 @@ class XkcdPlot {
     gElement.innerHtml = '';
   }
 
-  String drawGraphEquation(List equations, Map param) {
+  void drawGraphEquation(List equations, Map param) {
     List<String> colours = ['steelBlue', 'red', 'green', 'purple', 'gray'];
-    String warning = '';
     int xmin, xmax;
     double fineness;
     ylim = [double.INFINITY, double.NEGATIVE_INFINITY];
@@ -141,7 +140,6 @@ class XkcdPlot {
 
     if (xmin.isNaN || xmax.isNaN || xmin >= xmax) {
       print('[Invalid Functions] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
-      return('Sorry, invalid function');
     }
 
     removeAllEquations();
@@ -157,7 +155,6 @@ class XkcdPlot {
         cm.bindVariable(x, new Mathexp.Number(d));
         double result =  exp.evaluate(Mathexp.EvaluationType.REAL, cm);
         if (result.isNaN) {
-          warning = 'Some part of the equation is invalid along the domain you chose';
           return 0.0;
         } else if (result.isInfinite && result < 0) {
           return -25.0;
@@ -199,7 +196,6 @@ class XkcdPlot {
     draw();
 
     print('[Graph Equation] ' + equations.fold('', (value, element) => value + element.expression.toString() + ';'));
-    return(warning);
   }
 
   // Adding plot elements.

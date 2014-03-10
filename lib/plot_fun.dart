@@ -16,7 +16,6 @@ class PlotFunController {
   int xmin = -10;
   int xmax = 10;
   double fineness = 100.0;
-  String warning;
 
   XkcdPlot plotter = new XkcdPlot(document.querySelector('#plot'));
 
@@ -43,7 +42,7 @@ class PlotFunController {
       'xmax': xmax,
       'fineness': fineness
       };
-    warning = plotter.drawGraphEquation(equations, param);
+    plotter.drawGraphEquation(equations, param);
   }
 }
 
