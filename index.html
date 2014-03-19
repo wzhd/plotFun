@@ -93,6 +93,9 @@
     <script src="main.dart" type="application/dart"></script>
     <script src="js/dart.js"></script>
     <script src="js/interop.js"></script>
-
+    <script>
+      window.onload = function(e) {
+      parent.document.getElementById('xkcd-plot-frame').style.height = document['body'].offsetHeight + 'px';
+    </script>
 </body>
 </html>
