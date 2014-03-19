@@ -1,0 +1,98 @@
+
+<!DOCTYPE HTML>
+<html ng-app>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <title>Create your own XKCD-style Graphs</title>
+    <meta name="description" content="Instant XKCD-style Graphs created in Javascript D3 for your enjoyment" />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/angular.css" />
+    </head>
+<body plot-fun>
+
+    <div class="container">
+        <h1>{{ctrl.title}}</h1>
+        <div id="plot">
+          <svg ng-attr-width="{{ctrl.width + 2 * ctrl.margin}}"
+               ng-attr-height="{{ctrl.height + 2 * ctrl.margin}}">
+            <g ng-attr-transform="translate({{ctrl.margin}}, {{ctrl.margin}})">
+
+              <!-- Axis Labels -->
+              <text text-anchor="end" x="{{ctrl.xLabelX}}" y="{{ctrl.xLabelY}}" dy=".75em">{{ctrl.xLabel}}</text>
+              <text text-anchor="end" x="{{ctrl.yLabelX}}" y="{{ctrl.yLabelY}}" dy="-.75em" transform="rotate(-90)">
+                {{ctrl.yLabel}}
+              </text>
+
+              <!-- Axes and Arrows -->
+              <path class="axis" ng-repeat="axis in ctrl.axes"
+                    ng-attr-d="{{axis}}">
+              </path>
+
+              <!-- Equation Plots -->
+              <g ng-repeat="equation in ctrl.equations">
+                <path stroke="white" stroke-width="6px" fill="none"
+                      class="bgline" ng-attr-d="{{equation.line}}" >
+                </path>
+                <path stroke="{{equation.colour}}" stroke-width="3px" fill="none"
+                      ng-attr-d="{{equation.line}}" >
+                </path>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <form>
+            <fieldset style="float: left">
+                <legend>Equations</legend>
+                <div class="input" ng-repeat="equation in ctrl.equations">
+                    <label for="equation-{{$index}}-input">Equation {{$index+1}}</label>
+                    <input type="text" ng-change="ctrl.updateEquation(equation)" ng-model="equation.expression" id="equation-{{$index}}-input"/>
+                    <button ng-click="ctrl.removePlot($index)" class="remove-equation-button">x</button>
+                </div>
+
+                <button id="add-equation-button" ng-click="ctrl.addPlot()">Add Equation</button>
+            </fieldset>
+
+            <fieldset style="float: right">
+                <legend>Parameters</legend>
+                <div class="input">
+                    <label for="title-input">Title</label>
+                    <input type="text" placeholder="Your Graph" ng-model="ctrl.title" id="title-input"/>
+                </div>
+
+                <div class="input">
+                    <label for="x-label-input">X-label</label>
+                    <input type="text" placeholder="X" ng-model="ctrl.xLabel" id="x-label-input"/>
+                </div>
+
+                <div class="input">
+                    <label for="y-label-input">Y-label</label>
+                    <input type="text" placeholder="Y"  ng-model="ctrl.yLabel" id="y-label-input"/>
+                </div>
+
+                <div class="input">
+                    <label for="x-min-input">X-minimum</label>
+                    <input type="number" ng-change="ctrl.updateAllEquations()" ng-model="ctrl.xmin" id="x-min-input"/>
+                </div>
+
+                <div class="input">
+                    <label for="x-max-input">X-maximum</label>
+                    <input type="number" ng-change="ctrl.updateAllEquations()" ng-model="ctrl.xmax" id="x-max-input"/>
+                </div>
+
+                <label for="fineness-input">Fineness</label>
+                <input type="range" min="2" max="250" ng-model="ctrl.fineness" ng-change="ctrl.updateAllEquations()" id="fineness-input"/>
+            </fieldset>
+        </form>
+    </div>
+
+    <script src="main.dart" type="application/dart"></script>
+    <script src="js/dart.js"></script>
+    <script src="js/interop.js"></script>
+
+</body>
+</html>
