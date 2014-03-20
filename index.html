@@ -25,8 +25,8 @@
 <body plot-fun>
 
     <div class="container">
-        <h1>{{ctrl.title}}</h1>
-        <div id="plot">
+        <h1 class="ng-cloak">{{ctrl.title}}</h1>
+        <div id="plot" class="ng-cloak">
           <svg ng-attr-width="{{ctrl.width + 2 * ctrl.margin}}"
                ng-attr-height="{{ctrl.height + 2 * ctrl.margin}}">
             <g ng-attr-transform="translate({{ctrl.margin}}, {{ctrl.margin}})">

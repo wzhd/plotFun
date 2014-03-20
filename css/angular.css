@@ -1,3 +1,6 @@
 .ng-hide {
-   display: none !important;
+    display: none !important;
+}
+.ng-cloak{
+    display: none;
 }
